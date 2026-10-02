@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ladder Pomodoro — descending work intervals: 50, 40, 30, 20, 10 minutes, each followed by a 10 minute break." />
+  <title>Ladder Pomodoro</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍅</text></svg>" />
+</head>
+<body>
+  <main class="app" data-mode="idle">
+    <header>
+      <h1>Ladder Pomodoro</h1>
+      <p class="subtitle">Work gets shorter. Breaks stay the same.</p>
+    </header>
+
+    <!-- Cycle ladder -->
+    <ol class="ladder" id="ladder" aria-label="Cycle overview"></ol>
+
+    <!-- Timer -->
+    <section class="timer" aria-live="polite">
+      <div class="phase-label" id="phaseLabel">Ready?</div>
+      <div class="time" id="timeDisplay">50:00</div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="session-count" id="sessionCount">Cycle 1 · Session 1 of 5</div>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls">
+      <button class="btn btn-primary" id="startPauseBtn" type="button">Start</button>
+      <button class="btn" id="skipBtn" type="button">Skip</button>
+      <button class="btn" id="resetBtn" type="button">Reset</button>
+    </section>
+
+    <footer class="hint">
+      State is saved locally — a refresh won't lose your spot. You'll hear a chime at each switch.
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
