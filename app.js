@@ -14,8 +14,6 @@
     { type: "break", minutes: BREAK_MINUTES },
   ]);
 
-  const CYCLE_MS = PHASES.reduce((sum, p) => sum + p.minutes * 60_000, 0);
-
   // ---- State -------------------------------------------------------------
   // Timestamp-based so the clock stays accurate even if the tab is throttled.
   // state = { phaseIndex, cycle, remainingMs, running, endAt (epoch ms when running) }
@@ -31,15 +29,15 @@
 
   // ---- DOM ---------------------------------------------------------------
   const app = document.querySelector(".app");
-  const ladderEl = document.getElementById("ladder");
-  const phaseLabel = document.getElementById("phaseLabel");
-  const timeDisplay = document.getElementById("timeDisplay");
-  const progressFill = document.getElementById("progressFill");
-  const progressTrack = document.getElementById("progressTrack");
-  const sessionCount = document.getElementById("sessionCount");
-  const startPauseBtn = document.getElementById("startPauseBtn");
-  const skipBtn = document.getElementById("skipBtn");
-  const resetBtn = document.getElementById("resetBtn");
+  const ladderEl = document.querySelector("#ladder");
+  const phaseLabel = document.querySelector("#phaseLabel");
+  const timeDisplay = document.querySelector("#timeDisplay");
+  const progressFill = document.querySelector("#progressFill");
+  const progressTrack = document.querySelector("#progressTrack");
+  const sessionCount = document.querySelector("#sessionCount");
+  const startPauseBtn = document.querySelector("#startPauseBtn");
+  const skipBtn = document.querySelector("#skipBtn");
+  const resetBtn = document.querySelector("#resetBtn");
 
   // ---- Persistence -------------------------------------------------------
   function save() {
@@ -81,7 +79,7 @@
 
   function chime(kind) {
     try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = new AudioContext();
       const notes = kind === "work" ? [523.25, 659.25, 783.99] : [783.99, 659.25, 523.25];
       notes.forEach((freq, i) => {
         const osc = ctx.createOscillator();
@@ -198,11 +196,10 @@
 
   function render() {
     const p = phase();
-    const mode = state.running || state.remainingMs < phaseTotalMs() ? p.type : "idle";
+    const kindName = p.type === "work" ? "Work" : "Break";
+    const isStarted = state.running || state.remainingMs < phaseTotalMs();
     app.dataset.mode = state.running ? p.type : "idle";
-    phaseLabel.textContent = state.running || state.remainingMs < phaseTotalMs()
-      ? `${p.type === "work" ? "Work" : "Break"} · ${p.minutes} min`
-      : "Ready?";
+    phaseLabel.textContent = isStarted ? `${kindName} · ${p.minutes} min` : "Ready?";
     timeDisplay.textContent = fmt(state.remainingMs);
 
     const pct = Math.min(100, ((phaseTotalMs() - state.remainingMs) / phaseTotalMs()) * 100);
@@ -213,8 +210,10 @@
       Math.floor(state.phaseIndex / 2) + 1
     } of ${WORK_MINUTES.length}`;
 
-    startPauseBtn.textContent = state.running ? "Pause" : mode === "idle" ? "Start" : "Resume";
-    document.title = state.running ? `${fmt(state.remainingMs)} — ${p.type === "work" ? "Work" : "Break"}` : "Tomato";
+    if (state.running) startPauseBtn.textContent = "Pause";
+    else if (isStarted) startPauseBtn.textContent = "Resume";
+    else startPauseBtn.textContent = "Start";
+    document.title = state.running ? `${fmt(state.remainingMs)} — ${kindName}` : "Tomato";
     renderLadder();
   }
 
