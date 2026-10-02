@@ -1,4 +1,4 @@
-/* Ladder Pomodoro — static, no backend.
+/* Tomato — static, no backend.
  * Cycle: work 50 → break 10 → work 40 → break 10 → work 30 → break 10
  *        → work 20 → break 10 → work 10 → break 10 → repeat.
  */
@@ -19,7 +19,7 @@
   // ---- State -------------------------------------------------------------
   // Timestamp-based so the clock stays accurate even if the tab is throttled.
   // state = { phaseIndex, cycle, remainingMs, running, endAt (epoch ms when running) }
-  const STORAGE_KEY = "ladder-pomodoro-state-v1";
+  const STORAGE_KEY = "tomato-state-v1";
 
   let state = {
     phaseIndex: 0,
@@ -178,10 +178,16 @@
   // ---- Rendering ---------------------------------------------------------
   function renderLadder() {
     if (ladderEl.childElementCount === 0) {
-      PHASES.forEach((p, i) => {
+      PHASES.forEach((p) => {
         const li = document.createElement("li");
-        li.innerHTML = `<span class="mins">${p.minutes}</span><span class="kind">${p.type}</span>`;
-        ladderEl.appendChild(li);
+        const mins = document.createElement("span");
+        mins.className = "mins";
+        mins.textContent = p.minutes;
+        const kind = document.createElement("span");
+        kind.className = "kind";
+        kind.textContent = p.type;
+        li.append(mins, kind);
+        ladderEl.append(li);
       });
     }
     [...ladderEl.children].forEach((li, i) => {
@@ -208,7 +214,7 @@
     } of ${WORK_MINUTES.length}`;
 
     startPauseBtn.textContent = state.running ? "Pause" : mode === "idle" ? "Start" : "Resume";
-    document.title = state.running ? `${fmt(state.remainingMs)} — ${p.type === "work" ? "Work" : "Break"}` : "Ladder Pomodoro";
+    document.title = state.running ? `${fmt(state.remainingMs)} — ${p.type === "work" ? "Work" : "Break"}` : "Tomato";
     renderLadder();
   }
 

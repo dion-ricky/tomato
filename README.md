@@ -1,4 +1,4 @@
-# Ladder Pomodoro 🍅
+# Tomato 🍅
 
 A modified Pomodoro timer — the work blocks get shorter, the breaks stay the same.
 
@@ -29,14 +29,14 @@ npx serve .   # or: python3 -m http.server
 
 ## Deploy to GitHub Pages
 
-1. Create a GitHub repo (e.g. `ladder-pomodoro`)
+1. Create a GitHub repo (e.g. `tomato`)
 2. Push this folder's contents to the repo root:
 
    ```sh
-   git init && git add -A && git commit -m "Ladder Pomodoro"
-   git remote add origin git@github.com:<you>/ladder-pomodoro.git
+   git init && git add -A && git commit -m "Tomato"
+   git remote add origin git@github.com:<you>/tomato.git
    git push -u origin main
    ```
 
 3. On GitHub: **Settings → Pages → Source: Deploy from a branch → `main` / root → Save**
-4. Your site is live at `https://<you>.github.io/ladder-pomodoro/` within a minute or two.
+4. Your site is live at `https://<you>.github.io/tomato/` within a minute or two.
